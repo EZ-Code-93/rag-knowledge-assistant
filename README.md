@@ -149,7 +149,7 @@ In this README, replace the placeholder section below with a short description o
 
 #### Response: Problem Definition
 
-Replace this section with 3–5 sentences that define the problem your assistant helps solve.
+Employees need quick answers to common work related questions. Currently they have been turning to HR to answer these questions, but the turnaround time is slow and HR is quickly becoming overwhelmed by the constant flow of questions which is taking away from their other resonsibilities. An internal assistant will not only be able to give quick guidance to employees from approved company documents, but will free up HR to focus on their other responsibilities. This will ensure a steady and continuous company flow, which will in turn increase productivity and profitability.
 
 ---
 
