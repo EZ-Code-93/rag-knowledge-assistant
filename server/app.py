@@ -31,11 +31,11 @@ def ask_question():
     - Return the result as JSON.
     - Return a helpful error response if the question is missing.
     """
-    data = request.get_json(silent=True) or {}
-    question = data.get("question", "").strip()
+    # data = request.get_json(silent=True) or {}
+    # question = data.get("question", "").strip()
 
-    if not question:
-        return jsonify({"error": "Question is required."}), 400
+    # if not question:
+    #     return jsonify({"error": "Question is required."}), 400
 
     # TODO:
     # Replace this starter response by calling answer_question(question).
@@ -50,15 +50,23 @@ def ask_question():
     # result = answer_question(question)
     # return jsonify(result), 200
 
-    return jsonify(
-        {
-            "error": (
-                "The /api/ask route is connected, but the RAG workflow is not implemented yet. "
-                "Complete the TODO in server/app.py."
-            ),
-            "sources": [],
-        }
-    ), 501
+    data = request.get_json(silent=True) or {}
+    if not isinstance(data, dict):
+        return jsonify({"error": "Invalid JSON payload."}), 400
+
+    raw_question = data.get("question", "")
+    if not isinstance(raw_question, str) or not raw_question.strip():
+        return jsonify({"error": "Question is required."}), 400
+
+    question = raw_question.strip()
+
+    try:
+        result = answer_question(question)
+        return jsonify(result), 200
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 400
+    except RuntimeError as e:
+        return jsonify({"error": str(e), "sources": []}), 502
 
 
 if __name__ == "__main__":
