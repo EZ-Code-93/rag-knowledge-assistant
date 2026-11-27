@@ -99,7 +99,29 @@ def call_generation_model(prompt: str) -> str:
             }
         }
     """
-    raise NotImplementedError("TODO: Call the configured generation model.")
+    if not isinstance(prompt, str) or not prompt.strip():
+        raise ValueError("Prompt must be a non-empty string.")
+
+    try:
+        response = requests.post(
+            f"{Config.OLLAMA_BASE_URL}/api/generate",
+            json={
+                "model": Config.GENERATION_MODEL,
+                "prompt": prompt,
+                "stream": False,
+                "options": {
+                    "temperature": Config.TEMPERATURE
+                }
+            }, timeout=60
+        )
+        response.raise_for_status()
+        data = response.json()
+        if "response" not in data:
+            raise RuntimeError("Missing response in JSON.")
+        return data["response"].strip()
+    except (requests.RequestException, ValueError) as e:
+        raise RuntimeError(f"Failed to generate answer: {e}") from e
+
 
 
 def format_sources(chunks: list[dict[str, Any]]) -> list[dict[str, Any]]:
